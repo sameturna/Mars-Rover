@@ -15,32 +15,37 @@ namespace Mars_Rover
                 new CoordinatesModel() { X = 0, Y = 0, Orientation = OrientationType.North },
                 new CoordinatesModel() { X = 1, Y = 0, Orientation = OrientationType.East }
             };
-            CoordinatesModel selectedRover;
-            char[] instructionsArray;
 
             Console.WriteLine("Upper-right coordinates of the plateau:");
             GetUpperRightCoordinates(out int upperRightX, out int upperRightY);
-
             Console.WriteLine("(Current coordinates of Rovers: 0 0 N , 1 0 E)");
-            Console.WriteLine("Rover coordinates: ");
-            selectedRover = GetRoverCoordinates(rovers);
 
-
-            Console.WriteLine("Instructions:");
-            instructionsArray = GetInstructions();
-
-            foreach (var item in instructionsArray)
+            while (true)
             {
-                if (item.ToString() != InstructionType.Move.Value)
+                CoordinatesModel selectedRover;
+                char[] instructionsArray;
+
+                
+                Console.WriteLine("Rover coordinates: ");
+                selectedRover = GetRoverCoordinates(rovers);
+
+
+                Console.WriteLine("Instructions:");
+                instructionsArray = GetInstructions();
+
+                foreach (var item in instructionsArray)
                 {
-                    Turn(selectedRover, item);
+                    if (item.ToString() != InstructionType.Move.Value)
+                    {
+                        Turn(selectedRover, item);
+                    }
+                    else
+                    {
+                        Move(selectedRover, upperRightX, upperRightY);
+                    }
                 }
-                else
-                {
-                    Move(selectedRover, upperRightX, upperRightY);
-                }
+                Console.WriteLine($"New coordinates: {selectedRover.X} {selectedRover.Y} {selectedRover.Orientation.Value}");
             }
-            Console.WriteLine($"New coordinates: {selectedRover.X} {selectedRover.Y} {selectedRover.Orientation.Value}");
 
         }
 
