@@ -25,7 +25,6 @@ namespace Mars_Rover
                 CoordinatesModel selectedRover;
                 char[] instructionsArray;
 
-                
                 Console.WriteLine("Rover coordinates: ");
                 selectedRover = GetRoverCoordinates(rovers);
 
@@ -41,7 +40,7 @@ namespace Mars_Rover
                     }
                     else
                     {
-                        Move(selectedRover, upperRightX, upperRightY);
+                        Move(selectedRover, upperRightX, upperRightY, rovers);
                     }
                 }
                 Console.WriteLine($"New coordinates: {selectedRover.X} {selectedRover.Y} {selectedRover.Orientation.Value}");
@@ -49,34 +48,46 @@ namespace Mars_Rover
 
         }
 
-        private static void Move(CoordinatesModel selectedRover, int upperRightX, int upperRightY)
+        private static void Move(CoordinatesModel selectedRover, int upperRightX, int upperRightY, List<CoordinatesModel> rovers)
         {
             if (selectedRover.Orientation.Value == OrientationType.North.Value)
             {
                 if (selectedRover.Y < upperRightY)
                 {
-                    selectedRover.Y++;
+                    if (!rovers.Any(r => r.X == selectedRover.X && r.Y == (selectedRover.Y + 1)))
+                    {
+                        selectedRover.Y++;
+                    }
                 }
             }
             else if (selectedRover.Orientation.Value == OrientationType.West.Value)
             {
                 if (selectedRover.X > 0)
                 {
-                    selectedRover.X--;
+                    if (!rovers.Any(r => r.X == (selectedRover.X - 1) && r.Y == selectedRover.Y))
+                    {
+                        selectedRover.X--;
+                    }
                 }
             }
             else if (selectedRover.Orientation.Value == OrientationType.South.Value)
             {
                 if (selectedRover.Y > 0)
                 {
-                    selectedRover.Y--;
+                    if (!rovers.Any(r => r.X == selectedRover.X && r.Y == (selectedRover.Y - 1)))
+                    {
+                        selectedRover.Y--;
+                    }
                 }
             }
             else if (selectedRover.Orientation.Value == OrientationType.East.Value)
             {
                 if (selectedRover.X < upperRightX)
                 {
-                    selectedRover.X++;
+                    if (!rovers.Any(r => r.X == (selectedRover.X + 1) && r.Y == selectedRover.Y))
+                    {
+                        selectedRover.X++;
+                    }
                 }
             }
         }
@@ -160,7 +171,7 @@ namespace Mars_Rover
                             if (roverCoordinatesArray[2] == OrientationType.North.Value || roverCoordinatesArray[2] == OrientationType.South.Value
                                 || roverCoordinatesArray[2] == OrientationType.East.Value || roverCoordinatesArray[2] == OrientationType.West.Value)
                             {
-                                selectedRover = rovers.Where(r => r.X == roverX && r.Y == roverY && r.Orientation.Value == roverCoordinatesArray[2]).SingleOrDefault();
+                                selectedRover = rovers.Where(r => r.X == roverX && r.Y == roverY && r.Orientation.Value == roverCoordinatesArray[2]).FirstOrDefault();
                                 if (selectedRover != null)
                                 {
                                     break;
